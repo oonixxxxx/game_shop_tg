@@ -1,0 +1,15 @@
+app/
+│
+├── src/
+│   ├── bot/
+│   │   ├── asserts/
+│   │   ├── keyboard
+│   │   │   └──  keyboard.py
+│   │   ├── handlers/
+│   │   │   └── handlers.py
+│   │   ├── bot.py
+│   │   └── config.py
+│   │
+│   └── miniapp/
+│
+└── run.py

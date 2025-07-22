@@ -13,3 +13,16 @@ app/
 │   └── miniapp/
 │
 └── run.py
+
+
+Как запускать тесты
+
+
+Установите pytest и pytest-asyncio:
+
+pip install pytest pytest-asyncio
+
+
+Запустите тесты из корневой директории проекта:
+
+pytest tests/

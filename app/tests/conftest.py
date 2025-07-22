@@ -1,6 +1,11 @@
 import pytest
 from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.memory import MemoryStorage
+import logging
+
+@pytest.fixture(autouse=True)
+def setup_logging():
+    logging.basicConfig(level=logging.DEBUG)
 
 @pytest.fixture
 def storage():
@@ -12,4 +17,5 @@ def bot():
 
 @pytest.fixture
 def dp(storage):
-    return Dispatcher(storage=storage)
+    dp = Dispatcher(storage=storage)
+    yield dp

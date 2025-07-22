@@ -1,32 +1,11 @@
 from aiogram import Bot, Dispatcher
-from handlers.handlers import router as handlers_router
+from config import Config
+from middlewares.error_middleware import register_error_middleware
+from middlewares.db_middleware import DBMiddleware
+from handlers import start, help, catalog
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-
-from config import TOKEN
-
-async def main():
-    """
-    Основная функция инициализации и запуска бота.
-    Создает экземпляр бота, диспетчер и регистрирует обработчики.
-    """
-    if not TOKEN:
-        raise ValueError("Токен бота не установлен. Проверьте config.py")
-    
-    bot = Bot(token=TOKEN)
-    dp = Dispatcher()
-
-    # Регистрация всех роутеров
-    dp.include_router(handlers_router)
-
-    # Запускаем бота, пропуская накопленные сообщения
-    try:
-        await bot.delete_webhook(drop_pending_updates=True)
-        await dp.start_polling(bot)
-    except Exception as e:
-        print(f"Ошибка в работе бота: {e}")
-        raise
 
 def setup_logging():
     """Настройка системы логирования"""
@@ -45,20 +24,8 @@ def setup_logging():
             logging.StreamHandler()
         ]
     )
-    
     return logging.getLogger(__name__)
 
-logger = setup_logging()
-
-
-import asyncio
-from aiogram import Bot, Dispatcher
-
-from config import Config
-from middlewares.error_middleware import register_error_middleware
-from handlers import start, help, catalog
-
-# Настройка логирования
 logger = setup_logging()
 
 async def main():
@@ -69,6 +36,7 @@ async def main():
         dp = Dispatcher()
 
         # Регистрация middleware
+        dp.update.middleware(DBMiddleware())
         register_error_middleware(dp)
 
         # Регистрация роутеров
